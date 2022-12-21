@@ -1,15 +1,17 @@
 package main
 
 import (
-	"fmt"
+	"log"
+	"net/http"
 
-	"keiba-syushi/reader"
+	"keiba-syushi/handler"
 )
 
 func main() {
-	ticket, err := reader.ReadCode("50900022040511500200458454380909300995306710900000012090000001089012345678901234567890123456789")
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(ticket)
+	log.Fatalf("%+v", serve())
+}
+
+func serve() error {
+	mux := handler.NewRouter()
+	return http.ListenAndServe(":8000", mux)
 }
