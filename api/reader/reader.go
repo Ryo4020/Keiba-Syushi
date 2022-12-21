@@ -35,7 +35,5 @@ func ReadCode(code string) (TicketPropertyFromCode, error) {
 		return TicketPropertyFromCode{}, fmt.Errorf("%w (ReadTickets)", err)
 	}
 
-	fmt.Println(bettingRace, bettingContents)
-
 	return TicketPropertyFromCode{bettingRace, bettingContents}, nil
 }
