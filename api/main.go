@@ -12,6 +12,6 @@ func main() {
 }
 
 func serve() error {
-	mux := handler.NewRouter()
-	return http.ListenAndServe("127.0.0.1:8000", mux)
+	handler := handler.New()
+	return http.ListenAndServe("127.0.0.1:8000", handler)
 }

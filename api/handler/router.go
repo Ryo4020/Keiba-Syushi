@@ -2,12 +2,27 @@ package handler
 
 import (
 	"net/http"
+
+	"github.com/rs/cors"
 )
 
-func NewRouter() http.Handler {
+func New() http.Handler {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/reader", getReadCode)
 
-	return mux
+	cors := newCORS()
+	handler := cors.Handler(mux)
+
+	return handler
+}
+
+// CORS対応
+func newCORS() *cors.Cors {
+	return cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET"},
+		AllowedHeaders:   []string{"Content-Type"},
+		AllowCredentials: true,
+	})
 }
