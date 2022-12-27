@@ -9,7 +9,7 @@ import GlobalHeader from './layouts/GlobalHeader';
 function App() {
   return (
     <div className="back">
-      <Container disableGutters={true} maxWidth="md" sx={{height: "100%", display: "flex", flexDirection: "column"}}>
+      <Container disableGutters maxWidth="md" sx={{height: "100%", display: "flex", flexDirection: "column"}}>
         <GlobalHeader />
         <Box sx={{flexGrow: 1, bgcolor: "background.paper"}}>
           <TicketQRReader />
