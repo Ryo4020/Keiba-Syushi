@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "馬券リーダー",
+  "name": "馬券と収支管理サイト",
   "icons": [
     {
       "src": "favicon.ico",
