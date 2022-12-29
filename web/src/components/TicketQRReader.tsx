@@ -1,5 +1,8 @@
 import { useMemo, useState } from 'react';
+
 import { axiosInstance, isAxiosError } from '../providors/axios';
+
+import Container from '@mui/material/Container';
 
 import QRCodeReader from './QRCodeReader';
 import BettingTicketResult, { TicketPropertyFromCode } from './BettingTicketResult'
@@ -67,7 +70,7 @@ export default function TicketQRReader(): JSX.Element {
         }
     }, [errorMessage, ticketObject])
 
-    return <div>
+    return <Container maxWidth="sm" sx={{my: 6}}>
         {!isCompleted
             ? <QRCodeReader
                 numberOfReadCode={numberOfCode}
@@ -75,5 +78,5 @@ export default function TicketQRReader(): JSX.Element {
             />
             : <>{completeElement}</>
         }
-    </div>
+    </Container>
 }
