@@ -1,15 +1,20 @@
 import './App.css';
 
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+
 import TicketQRReader from './components/TicketQRReader';
 import GlobalHeader from './layouts/GlobalHeader';
 
 function App() {
   return (
     <div className="back">
-      <div className='App'>
+      <Container disableGutters maxWidth="md" sx={{height: "100%", display: "flex", flexDirection: "column"}}>
         <GlobalHeader />
-        <TicketQRReader />
-      </div>
+        <Box sx={{flexGrow: 1, bgcolor: "background.paper", overflow: "scroll"}}>
+          <TicketQRReader />
+        </Box>
+      </Container>
     </div>
   )
 }
