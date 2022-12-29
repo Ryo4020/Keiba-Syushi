@@ -11,7 +11,7 @@ function App() {
     <div className="back">
       <Container disableGutters maxWidth="md" sx={{height: "100%", display: "flex", flexDirection: "column"}}>
         <GlobalHeader />
-        <Box sx={{flexGrow: 1, bgcolor: "background.paper"}}>
+        <Box sx={{flexGrow: 1, bgcolor: "background.paper", overflow: "scroll"}}>
           <TicketQRReader />
         </Box>
       </Container>
