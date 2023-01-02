@@ -119,7 +119,7 @@ class TicketQRReader extends React.Component<Props, {readResultList: string[], s
 
       const listItems = QRReaderDescriptions.map((item, index) => 
         <ListItem key={index} alignItems="flex-start">
-          <ListItemIcon>
+          <ListItemIcon sx={{mt: "6px"}}>
             <ArrowRightIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText
