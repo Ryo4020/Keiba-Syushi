@@ -119,7 +119,7 @@ class TicketQRReader extends React.Component<Props, {readResultList: string[], s
 
       const listItems = QRReaderDescriptions.map((item, index) => 
         <ListItem key={index} alignItems="flex-start">
-          <ListItemIcon>
+          <ListItemIcon sx={{mt: "6px"}}>
             <ArrowRightIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText
@@ -169,7 +169,7 @@ class TicketQRReader extends React.Component<Props, {readResultList: string[], s
           {QRReaderDescriptList()}
           <Divider variant="middle" />
           <Box width="100%" textAlign="center" mt={2}>
-            <Button onClick={() => this.setupCamera()} variant="outlined">QRコードを読み取る</Button>
+            <Button variant="outlined" onClick={() => this.setupCamera()}>QRコードを読み取る</Button>
           </Box>
         </>
     }
@@ -201,7 +201,7 @@ class TicketQRReader extends React.Component<Props, {readResultList: string[], s
                 </Stack>
               </CardContent>
             </Card>
-            <Button onClick={() => this.stopCamera()} variant="outlined" fullWidth>カメラを閉じる</Button>
+            <Button variant="outlined" fullWidth onClick={() => this.stopCamera()}>カメラを閉じる</Button>
           </Stack>
         </Paper>
       </Stack>

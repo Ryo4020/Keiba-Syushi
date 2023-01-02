@@ -1,3 +1,14 @@
+import Box from '@mui/material/Box';
+import Card from "@mui/material/Card"
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import Grid from "@mui/material/Grid";
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListSubheader from '@mui/material/ListSubheader';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+
 export type TicketPropertyFromCode = { // 解読APIから得られるデータ型
     Race: {
         Track: string,
@@ -18,37 +29,80 @@ export type TicketPropertyFromCode = { // 解読APIから得られるデータ�
 export default function BettingTicketResult(props: {ticketObject: TicketPropertyFromCode}): JSX.Element {
     const ticket = props.ticketObject
     const {Track, Year, Turn, Day, Number } = ticket.Race
-    const track = <div>{Track}</div>
-    const year = <div><span>{Year}</span>年</div>
-    const turn = <div><span>{Turn}</span>回</div>
-    const day = <div><span>{Day}</span>日</div>
-    const raceNum = <div><span>{Number}</span>レース</div>
+    const track = <Typography variant="h5" noWrap>{Track}</Typography>
+    const year = <Typography variant="h6" noWrap><Box component="span">{Year}</Box>年</Typography>
+    const turn = <Typography variant="h6" noWrap><Box component="span">{Turn}</Box>回</Typography>
+    const day = <Typography variant="h6" noWrap><Box component="span">{Day}</Box>日</Typography>
+    const raceNum = <Typography variant="h5" noWrap><Box component="span">{Number}</Box>レース</Typography>
 
-    const betContents = ticket.Bet.map((bet, betIndex) => { // 展開された馬券ごと
+    const raceText = <Grid spacing={2} container justifyContent="center" alignItems="flex-end">
+        <Stack component={Grid} item spacing={1} direction="row">
+            {year}{turn}{day}
+        </Stack>
+        <Stack component={Grid} item spacing={1} direction="row">
+            {track}{raceNum}
+        </Stack>
+    </Grid>
+
+    const betContentItems = ticket.Bet.map((bet, betIndex) => { // 展開された馬券ごと
         const {Type, Style, Price, BetCombination } = bet
-        const type = <div>{Type}</div>
-        const betStyle = <div>{Style}</div>
-        const price = <div>各<span>{Price}</span>円</div>
-        const combinations = BetCombination.filter(value => value).map((value, orderIndex) => { // 1~3頭目の組ごと
-            const label = <p>{orderIndex + 1}頭目</p>
+        const type = <Typography variant="h5" noWrap fontWeight="bold">{Type}</Typography>
+        const betStyle = <Typography noWrap>{Style}</Typography>
+        const price = <Typography variant="h6" noWrap><Box component="span" fontWeight="medium">{Price}</Box>円</Typography>
+
+        const betCardHeader = <Stack spacing={1} direction="row" justifyContent="space-between" flexWrap="wrap">{type}{price}</Stack>
+
+        const combinationItems = BetCombination.filter(value => value).map((value, orderIndex) => { // 1~3頭目の組ごと
+            const label = <Typography variant="subtitle1" noWrap>{orderIndex + 1}頭目</Typography>
             const numbers = value.map((num, numIndex) => { // 選択された馬番ごと
-                return <span key={numIndex} style={{border: "1px black solid", margin: "0 8px"}}>{num}</span>
+                return <Box
+                            key={numIndex}
+                            width={24} height={24}
+                            fontWeight="medium" fontSize={20}
+                            textAlign="center"
+                            border={1}
+                            borderColor="common.black"
+                            mx={1}
+                            mb={1}
+                        >
+                            {num}
+                        </Box>
             })
 
-            return <div key={orderIndex} style={{display: "flex", justifyContent: "center"}}>{label}{numbers}</div>
+            return <ListItem key={orderIndex} dense>
+                <Grid container spacing={1}>
+                    <Grid item xs="auto">
+                        {label}
+                    </Grid>
+                    <Grid item xs display="flex" direction="row" flexWrap="wrap">
+                        {numbers}
+                    </Grid>
+                </Grid>
+            </ListItem>
         })
 
-        return <div key={betIndex}><div style={{display: "flex", justifyContent: "center"}}>{type}{betStyle}{price}</div>{combinations}</div>
+        return <ListItem key={betIndex} disableGutters>
+            <Card raised sx={{width: "100%"}}>
+                <CardHeader disableTypography title={betCardHeader} />
+                <CardContent sx={{pt: 1, borderTop: 2, borderColor: "secondary.main"}}>
+                    <List disablePadding subheader={<ListSubheader disableGutters>{betStyle}</ListSubheader>}>
+                        {combinationItems}
+                    </List>
+                </CardContent>
+            </Card>
+        </ListItem>
     })
 
-    return <div style={{ margin: "0 auto", padding: "12px", border: "1px dashed silver"}}>
-        <header style={{display: "flex", justifyContent: "center"}}>
-            {year}
-            {turn}
-            {day}
-            {track}
-            {raceNum}
-        </header>
-        <main style={{margin: "18px"}}>{betContents}</main>
-    </div>
+    return <Card>
+        <CardHeader
+            sx={{bgcolor: "secondary.light"}}
+            title={raceText}
+            disableTypography
+        />
+        <CardContent>
+            <List disablePadding>
+                {betContentItems}
+            </List>
+        </CardContent>
+    </Card>
 }
