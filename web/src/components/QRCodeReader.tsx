@@ -2,6 +2,26 @@ import React from "react";
 
 import { BrowserQRCodeReader, IScannerControls } from "@zxing/browser"
 
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Card from "@mui/material/Card";
+import CardContent from '@mui/material/CardContent';
+import Divider from '@mui/material/Divider';
+import IconButton from "@mui/material/IconButton";
+import LinearProgress from '@mui/material/LinearProgress';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import Tooltip from "@mui/material/Tooltip";
+import Typography from '@mui/material/Typography';
+
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+
 type Props = {
   numberOfReadCode: number // 読み取るQRコード数
   onCompleteRead: (texts: string[]) => void // 読み取りが完了時に結果配列を処理する関数
@@ -83,50 +103,103 @@ class QRCodeReader extends React.Component<Props, {readResultList: string[], sca
   render() {
     const resultList = this.state.readResultList;
 
+    // QRリーダーの説明文の箇条書きリスト
+    const QRReaderDescriptList = () => {
+      const QRReaderDescriptions = [
+        <Typography>「QRコードを読み取る」ボタンを押すとカメラが起動します。</Typography>,
+        <Typography>必ず、<strong>左</strong>のQRコードから<strong>先に</strong>読み取って下さい。</Typography>,
+        <Typography>2つのQRコードの読み取りが成功すると、自動で解読を開始します。</Typography>,
+        <Typography>解読終了後、馬券の購入内容が表示されます。</Typography>
+      ] // QRリーダーの説明文リスト
+
+      const listItems = QRReaderDescriptions.map((item, index) => 
+        <ListItem key={index} alignItems="flex-start">
+          <ListItemIcon>
+            <ArrowRightIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText
+            primary={item}
+          />
+        </ListItem>
+      )
+
+      return <List>{listItems}</List>
+    }
+
     // 読み取り状況の表示
     const readQRStatuses = Array(this.props.numberOfReadCode).fill(null).map((_, index) => {
       const label = `${index + 1}枚目: `
       const result = resultList[index]
+      const width = result ? 120 : 72
       const status = result ? '完了' : '未'
-      const textColor = result ? 'green' : 'gray'
+      const textColor = result ? 'success.main' : 'text.disabled'
+      const deleteIconButton = result ?
+        <Tooltip title="取り消し">
+          <IconButton color="warning" size="small" sx={{p: 0}}>
+            <HighlightOffIcon fontSize="small" />
+          </IconButton>
+        </Tooltip>
+        : <></>
+
       return (
-        <div key={index}>
-          {label}<strong style={{color: textColor}}>{status}</strong>
-        </div>
+        <Stack key={index} width={width} direction="row" spacing={1}>
+          <Typography variant="body1">
+            {label}
+          </Typography>
+          <Typography fontWeight="bold" color={textColor}>{status}</Typography>
+          {deleteIconButton}
+        </Stack>
       )
     })
 
-    // カメラ説明や制御にまつわる表示
-    const QRReaderSection = () => {
-      if (this.state.scannerControls === null) { // カメラ非表示
-        return <>
-          <ul style={{width: "50%", textAlign: "left", margin: "0 auto"}}>
-            <li>馬券にある2つのQRコードをカメラで読み取るとその購入内容を表示します。</li>
-            <li>ボタンを押すとカメラが起動します。</li>
-            <li>必ず、<strong>左</strong>のQRコードから<strong>先に</strong>読み取って下さい。</li>
-          </ul>
-          <button onClick={() => this.setupCamera()}>QRコードを読み取る</button>
-        </>
-      } else {
-        return <>
-            <div>
-              <p>読み取り状況</p>
-              <div style={{width: "600px", margin: "0 auto", display: "flex", justifyContent: "space-around"}}>{readQRStatuses}</div>
-            </div>
-            <p>必ず、<strong>左</strong>のQRコードから<strong>先に</strong>読み取って下さい。</p>
-            <button onClick={() => this.stopCamera()}>カメラを閉じる</button>
-        </>
+    // カメラ起動前の表示
+    const SectionBeforeQRReader = () => {
+      if (this.state.scannerControls !== null) { // ここで返すElementは数秒ごとに再レンダリングされるのでHiddenで実装
+        return <></>
       }
+      return <>
+          <Typography variant="h6">
+            馬券にある2つのQRコードをカメラで読み取り、その購入内容を表示します。
+          </Typography>
+          {QRReaderDescriptList()}
+          <Divider variant="middle" />
+          <Box width="100%" textAlign="center" mt={2}>
+            <Button onClick={() => this.setupCamera()} variant="outlined">QRコードを読み取る</Button>
+          </Box>
+        </>
     }
 
-    return (<>
-        <video
-          hidden={this.state.scannerControls === null}
-          width={600}
-          ref={this.cameraRef}
-        />
-        <QRReaderSection />
-      </>
+    return (
+      <Stack spacing={1}>
+        <Typography variant="h5">
+          馬券のQRコードを読み取る
+        </Typography>
+        <LinearProgress variant="determinate" value={100} color="secondary" />
+        <Paper sx={{p: 2}}>
+          <SectionBeforeQRReader />
+          {/* 以下からカメラ起動中の表示 */}
+          {/* `cameraRef`は条件付きレンダー不可、`hidden`での実装 */}
+          <Stack display={this.state.scannerControls === null ? "none" : "block"} spacing={1}>
+            <Alert severity="info">必ず、<strong>左</strong>のQRコードから<strong>先に</strong>読み取って下さい。</Alert>
+            <video
+              width="100%"
+              ref={this.cameraRef}
+            />
+            <Card>
+              <CardContent sx={{display: "flex", alignItems: "center", flexWrap: "wrap"}}>
+                <Typography fontWeight="bold" variant="subtitle2" mr={4}>読み取り状況</Typography>
+                <Stack
+                  flex={1} display="flex" justifyContent="center" direction="row" spacing={2}
+                  divider={<Divider variant="middle" orientation="vertical" flexItem />}
+                >
+                  {readQRStatuses}
+                </Stack>
+              </CardContent>
+            </Card>
+            <Button onClick={() => this.stopCamera()} variant="outlined" fullWidth>カメラを閉じる</Button>
+          </Stack>
+        </Paper>
+      </Stack>
     )
   }
 }
