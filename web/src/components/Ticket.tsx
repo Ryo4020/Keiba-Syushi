@@ -2,7 +2,13 @@ import { useMemo, useState } from 'react';
 
 import { axiosInstance, isAxiosError } from '../providors/axios';
 
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
+import CircularProgress from '@mui/material/CircularProgress';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 import TicketQRReader from './TicketQRReader';
 import BettingTicketResult, { TicketPropertyFromCode } from './BettingTicketResult'
@@ -54,17 +60,25 @@ export default function Ticket(): JSX.Element {
     const completeElement = useMemo(() => {
         if (errorMessage !== "") { // エラー発生時はメッセージ表示
             return(<>
-                <p>{errorMessage}</p>
-                <button onClick={() =>  resetQRReader()}>最初の画面に戻る</button>
+                <Alert severity="error">{errorMessage}</Alert>
+                <Box width="100%" textAlign="center" mt={2}>
+                    <Button variant="outlined" onClick={() => resetQRReader()}>最初の画面に戻る</Button>
+                </Box>
             </>)
         } else if (ticketObject === null) { // APIからデータが来るまでロード画面
-            return(<p>Now Loading...</p>)
+            return(<Stack width="100%" display="flex" justifyContent="center" direction="row" flexWrap="wrap" spacing={4}>
+                    <CircularProgress color="info" />
+                    <Typography variant="h6">Now Loading...</Typography>
+                </Stack>
+            )
         } else {
-            return(<>
-                <p>読み取りが完了しました。</p>
+            return(<Stack width="100%" spacing={2}>
+                <Alert severity="success">読み取りが完了しました</Alert>
                 <BettingTicketResult ticketObject={ticketObject} />
-                <button onClick={() => resetQRReader()}>他の馬券を読み取る</button>
-            </>)
+                <Box width="100%" textAlign="center" mt={2}>
+                    <Button variant="outlined" onClick={() => resetQRReader()}>最初の画面に戻る</Button>
+                </Box>
+            </Stack>)
         }
     }, [errorMessage, ticketObject])
 
