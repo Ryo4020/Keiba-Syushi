@@ -2,6 +2,7 @@ package reader
 
 import (
 	"fmt"
+	"unicode/utf8"
 
 	"keiba-syushi/reader/bet"
 	"keiba-syushi/reader/race"
@@ -16,10 +17,10 @@ type (
 
 // QRコードから取得される数字のコード->馬券情報
 func ReadCode(code string) (TicketPropertyFromCode, error) {
-	// length := utf8.RuneCountInString(code)
-	// if length != 190 {
-	// 	return "", fmt.Errorf("invalid length code")
-	// }
+	length := utf8.RuneCountInString(code)
+	if length != 190 {
+		return TicketPropertyFromCode{}, fmt.Errorf("invalid length code")
+	}
 
 	bettingRace, err := race.ReadRace(code)
 	if err != nil {
