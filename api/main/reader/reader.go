@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"unicode/utf8"
 
-	"keiba-syushi/reader/bet"
-	"keiba-syushi/reader/race"
+	"keiba-syushi/main/reader/bet"
+	"keiba-syushi/main/reader/race"
 )
 
 type (

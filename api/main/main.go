@@ -4,10 +4,11 @@ import (
 	"log"
 	"net/http"
 
-	"keiba-syushi/handler"
+	"keiba-syushi/main/handler"
 )
 
 func main() {
+	// 実行はこの/mainフォルダから
 	log.Fatalf("%+v", serve())
 }
 

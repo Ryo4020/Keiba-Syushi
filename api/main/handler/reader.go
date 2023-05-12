@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"keiba-syushi/reader"
+	"keiba-syushi/main/reader"
 )
 
 // Request for `GET /reader?code=***`
