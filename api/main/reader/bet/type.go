@@ -5,7 +5,7 @@ import "fmt"
 // コード->馬券の種類
 func (b *BettingContent) setTypeFromCode(code string) (ticketType, error) {
 	var ticketTypes ticketTypeList
-	ticketTypes, err := decodeJSONFile(ticketTypes, "reader/json/ticket-type.json")
+	ticketTypes, err := decodeJSONFile(ticketTypes, "../json/ticket-type.json")
 	if err != nil {
 		return ticketType{}, fmt.Errorf("%w", err)
 	}
