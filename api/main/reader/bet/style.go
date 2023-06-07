@@ -9,7 +9,7 @@ import (
 // コード->購入の形式
 func readBettingStyle(code string) (bettingStyle, error) {
 	var styles bettingStyleList
-	styles, err := decodeJSONFile(styles, "reader/json/betting-style-type.json")
+	styles, err := decodeJSONFile(styles, "../json/betting-style-type.json")
 	if err != nil {
 		return bettingStyle{}, fmt.Errorf("%w", err)
 	}

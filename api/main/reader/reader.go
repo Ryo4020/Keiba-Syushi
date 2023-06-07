@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"unicode/utf8"
 
-	"keiba-syushi/reader/bet"
-	"keiba-syushi/reader/race"
+	"github.com/Ryo4020/Keiba-Syushi/tree/main/api/main/reader/bet"
+	"github.com/Ryo4020/Keiba-Syushi/tree/main/api/main/reader/race"
 )
 
 type (

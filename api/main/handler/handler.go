@@ -6,11 +6,11 @@ import (
 	"log"
 	"net/http"
 
-	"keiba-syushi/reader"
+	"github.com/Ryo4020/Keiba-Syushi/tree/main/api/main/reader"
 )
 
 // Request for `GET /reader?code=***`
-func getReadCode(w http.ResponseWriter, r *http.Request) {
+func GetReadCode(w http.ResponseWriter, r *http.Request) {
 	code := r.FormValue("code")
 
 	ticket, err := reader.ReadCode(code)
