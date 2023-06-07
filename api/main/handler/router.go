@@ -9,7 +9,7 @@ import (
 func New() http.Handler {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/reader", getReadCode)
+	mux.HandleFunc("/reader", GetReadCode)
 
 	cors := newCORS()
 	handler := cors.Handler(mux)
